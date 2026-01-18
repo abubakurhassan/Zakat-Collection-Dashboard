@@ -4,24 +4,21 @@ from openpyxl import load_workbook
 import os
 from datetime import datetime, timedelta
 
-# Use environment variable for file path, with fallback
-EXCEL_FILE = os.environ.get('EXCEL_FILE', r"C:\path\to\your\file.xlsx")
+EXCEL_FILE = r"C:\path\to\your\file.xlsx"
 SHEET = "Sheet1"
 CELL = "B2"
 
 app = Flask(__name__)
-CORS(app)
+CORS(app)  # This allows requests from any origin (including GitHub Pages)
 
-# Simple cache
 cache = {
     "value": None,
     "timestamp": None,
     "file_mtime": None
 }
-CACHE_DURATION = 60  # seconds
+CACHE_DURATION = 60
 
 def file_has_changed():
-    """Check if Excel file has been modified"""
     try:
         current_mtime = os.path.getmtime(EXCEL_FILE)
         return cache["file_mtime"] != current_mtime
@@ -29,23 +26,19 @@ def file_has_changed():
         return True
 
 def get_total(sheet=SHEET, cell=CELL):
-    """Read value from Excel with caching"""
     now = datetime.now()
     
-    # Check if cache is valid
     if (cache["value"] is not None and 
         cache["timestamp"] and 
         now - cache["timestamp"] < timedelta(seconds=CACHE_DURATION) and
         not file_has_changed()):
         return cache["value"]
     
-    # Read from Excel
     try:
         wb = load_workbook(EXCEL_FILE, data_only=True)
         ws = wb[sheet]
         value = ws[cell].value or 0
         
-        # Update cache
         cache["value"] = value
         cache["timestamp"] = now
         cache["file_mtime"] = os.path.getmtime(EXCEL_FILE)
@@ -60,13 +53,11 @@ def get_total(sheet=SHEET, cell=CELL):
 
 @app.route("/total")
 def total():
-    """Get total from Excel cell"""
     sheet = request.args.get("sheet", SHEET)
     cell = request.args.get("cell", CELL)
     
     result = get_total(sheet, cell)
     
-    # Handle error responses
     if isinstance(result, tuple):
         return jsonify(result[0]), result[1]
     
@@ -74,7 +65,6 @@ def total():
 
 @app.route("/health")
 def health():
-    """Health check endpoint"""
     file_exists = os.path.exists(EXCEL_FILE)
     return jsonify({
         "status": "healthy" if file_exists else "unhealthy",
@@ -83,5 +73,5 @@ def health():
     })
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=False)
+    # 0.0.0.0 allows access from other devices on your network
+    app.run(host="0.0.0.0", port=5000, debug=True)
