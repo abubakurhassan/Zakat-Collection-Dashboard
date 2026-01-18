@@ -317,7 +317,7 @@ async function loadTotal() {
     try {
         valueEl.classList.add("loading");
         
-        const res = await fetch("http://127.0.0.1:5000/total");
+        const res = await fetch("https://supercordial-cary-peerlessly.ngrok-free.dev");
         
         if (!res.ok) {
             throw new Error(`HTTP ${res.status}`);
