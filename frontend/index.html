@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Total Display</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #0a0a0a;
+    color: white;
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Animated background */
+.bg-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(30, 58, 138, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(37, 99, 235, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+    animation: bgShift 20s ease-in-out infinite;
+}
+
+@keyframes bgShift {
+    0%, 100% { transform: scale(1) translate(0, 0); }
+    33% { transform: scale(1.1) translate(-5%, 5%); }
+    66% { transform: scale(1.05) translate(5%, -5%); }
+}
+
+/* Floating particles */
+.particle {
+    position: fixed;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: float linear infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(100vh) scale(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100vh) scale(1);
+        opacity: 0;
+    }
+}
+
+.container {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 60px 40px;
+    background: rgba(15, 23, 42, 0.4);
+    border-radius: 40px;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    animation: containerFadeIn 1s ease-out;
+    min-width: 600px;
+}
+
+@keyframes containerFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    opacity: 0.5;
+    background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.5) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.value-container {
+    position: relative;
+    margin: 40px 0;
+}
+
+#value {
+    font-size: 110px;
+    font-weight: 700;
+    line-height: 1.2;
+    background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 50%, #60a5fa 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 8s ease infinite;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: -2px;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+#value.loading {
+    animation: gradientShift 8s ease infinite, pulse 2s ease-in-out infinite;
+}
+
+#value.error {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 50%, #ff8787 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 8s ease infinite;
+}
+
+#value.update {
+    transform: scale(1.05);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+/* Glow effect behind value - removed */
+
+.stats-bar {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.4;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #3b82f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 10px #4ade80;
+    animation: blink 2s ease-in-out infinite;
+}
+
+.status-dot.error {
+    background: #ff6b6b;
+    box-shadow: 0 0 10px #ff6b6b;
+    animation: none;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.currency-symbol {
+    font-size: 60px;
+    opacity: 0.6;
+    margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        min-width: unset;
+        width: 90%;
+        padding: 40px 20px;
+    }
+    
+    h1 {
+        font-size: 20px;
+        letter-spacing: 4px;
+    }
+    
+    #value {
+        font-size: 60px;
+    }
+    
+    .currency-symbol {
+        font-size: 40px;
+    }
+    
+    .stats-bar {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+</style>
+</head>
+<body>
+<div class="bg-animation"></div>
+
+<div class="container">
+    <h1>Account ga hurivaru</h1>
+    
+    <div class="value-container">
+        <div id="value" class="loading">Loading…</div>
+    </div>
+    
+    <div class="stats-bar">
+        <div class="stat">
+            <div class="stat-label">Status</div>
+            <div class="stat-value">
+                <div class="status-dot" id="statusDot"></div>
+                <span id="statusText">Connecting</span>
+            </div>
+        </div>
+        
+        <div class="stat">
+            <div class="stat-label">Last Updated</div>
+            <div class="stat-value" id="lastUpdate">--:--:--</div>
+        </div>
+        
+        <div class="stat">
+            <div class="stat-label">Refresh Rate</div>
+            <div class="stat-value">10s</div>
+        </div>
+    </div>
+</div>
+
+<script>
+const valueEl = document.getElementById("value");
+const statusDot = document.getElementById("statusDot");
+const statusText = document.getElementById("statusText");
+const lastUpdateEl = document.getElementById("lastUpdate");
+
+let lastValue = null;
+
+// Create floating particles
+function createParticles() {
+    for (let i = 0; i < 15; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        const size = Math.random() * 4 + 2;
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+        particle.style.animationDelay = Math.random() * 5 + 's';
+        
+        document.body.appendChild(particle);
+    }
+}
+
+createParticles();
+
+function formatCurrency(value) {
+    return Number(value).toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}
+
+function updateTimestamp() {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-US', { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        second: '2-digit'
+    });
+    lastUpdateEl.textContent = timeStr;
+}
+
+async function loadTotal() {
+    try {
+        valueEl.classList.add("loading");
+        
+        const res = await fetch("http://127.0.0.1:5000/total");
+        
+        if (!res.ok) {
+            throw new Error(`HTTP ${res.status}`);
+        }
+        
+        const data = await res.json();
+        
+        if (data.error) {
+            throw new Error(data.error);
+        }
+        
+        const formattedValue = formatCurrency(data.total);
+        const newValue = `MVR ${formattedValue}`;
+        
+        // Animate if value changed
+        if (lastValue !== null && lastValue !== newValue) {
+            valueEl.classList.add("update");
+            setTimeout(() => {
+                valueEl.classList.remove("update");
+            }, 500);
+        }
+        
+        valueEl.innerHTML = `<span class="currency-symbol">MVR</span>${formattedValue}`;
+        valueEl.classList.remove("error");
+        lastValue = newValue;
+        
+        // Update status
+        statusDot.classList.remove("error");
+        statusText.textContent = "Live";
+        updateTimestamp();
+        
+    } catch (e) {
+        console.error("Error loading total:", e);
+        valueEl.innerHTML = "Connection Error";
+        valueEl.classList.add("error");
+        
+        statusDot.classList.add("error");
+        statusText.textContent = "Offline";
+        lastUpdateEl.textContent = "Error";
+    } finally {
+        valueEl.classList.remove("loading");
+    }
+}
+
+// Initial load
+loadTotal();
+
+// Refresh every 10 seconds
+setInterval(loadTotal, 10000);
+
+// Refresh when tab becomes visible
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+        loadTotal();
+    }
+});
+</script>
+</body>
+</html>
