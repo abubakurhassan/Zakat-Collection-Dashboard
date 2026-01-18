@@ -1,0 +1,25 @@
+# Python
+backend/__pycache__/
+backend/*.pyc
+backend/*.pyo
+backend/venv/
+backend/env/
+
+# Excel files
+*.xlsx
+*.xls
+*.xlsm
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment variables
+.env

@@ -3,7 +3,34 @@ flask-cors==4.0.0
 openpyxl==3.1.2
 ```
 
-**backend/.gitignore:**
+---
+
+## **Root .gitignore**
+```
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+env/
+
+# Excel files
+*.xlsx
+*.xls
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+```
+
+---
+
+## **backend/.gitignore**
 ```
 __pycache__/
 *.pyc

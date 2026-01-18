@@ -4,12 +4,12 @@ from openpyxl import load_workbook
 import os
 from datetime import datetime, timedelta
 
-EXCEL_FILE = r"C:\path\to\your\file.xlsx"
+EXCEL_FILE = r"S:\Islamic Affairs\Zakat Section\Zakat Unit 2026\Corporate Affairs\Finance Unit\Account Statements\Account Statements Log.xlsx"
 SHEET = "Sheet1"
-CELL = "B2"
+CELL = "E3"
 
 app = Flask(__name__)
-CORS(app)  # This allows requests from any origin (including GitHub Pages)
+CORS(app)
 
 cache = {
     "value": None,
@@ -73,5 +73,4 @@ def health():
     })
 
 if __name__ == "__main__":
-    # 0.0.0.0 allows access from other devices on your network
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="127.0.0.1", port=5000, debug=True)
