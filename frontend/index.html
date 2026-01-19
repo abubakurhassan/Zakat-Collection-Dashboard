@@ -603,10 +603,21 @@ async function loadDashboardData() {
         expensesValueEl.classList.add("loading");
         balanceValueEl.classList.add("loading");
         
-        const res = await fetch("http://127.0.0.1:5000/dashboard");
-        
+        const API_URL = "https://supercordial-cary-peerlessly.ngrok-free.dev"; 
+        const res = await fetch(`${API_URL}/dashboard`, {
+            headers: {
+                "ngrok-skip-browser-warning": "true"
+            }
+        });
         if (!res.ok) {
             throw new Error(`HTTP ${res.status}`);
+        }
+
+        const contentType = res.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            const text = await res.text();
+            console.error("Non-JSON response:", text);
+            throw new Error("API did not return JSON");
         }
         
         const data = await res.json();

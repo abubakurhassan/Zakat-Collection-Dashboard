@@ -24,7 +24,7 @@ CHART_DATE_COL = "A"       # Column with dates
 CHART_VALUE_COL = "B"      # Column with daily amounts
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 cache = {
     "data": None,
@@ -167,4 +167,4 @@ def health():
     })
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
