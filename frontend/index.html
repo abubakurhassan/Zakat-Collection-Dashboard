@@ -2,388 +2,39 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="style.css">
 <title>Zakat Collection Dashboard</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    background: #0a0a0a;
-    color: white;
-    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-    position: relative;
-    padding: 20px;
-}
-
-.bg-animation {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    background: radial-gradient(circle at 20% 50%, rgba(30, 58, 138, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(37, 99, 235, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 40% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
-    animation: bgShift 20s ease-in-out infinite;
-}
-
-@keyframes bgShift {
-    0%, 100% { transform: scale(1) translate(0, 0); }
-    33% { transform: scale(1.1) translate(-5%, 5%); }
-    66% { transform: scale(1.05) translate(5%, -5%); }
-}
-
-.particle {
-    position: fixed;
-    background: rgba(59, 130, 246, 0.1);
-    border-radius: 50%;
-    pointer-events: none;
-    animation: float linear infinite;
-    z-index: 1;
-}
-
-@keyframes float {
-    0% {
-        transform: translateY(100vh) scale(0);
-        opacity: 0;
-    }
-    10% {
-        opacity: 1;
-    }
-    90% {
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(-100vh) scale(1);
-        opacity: 0;
-    }
-}
-
-.dashboard {
-    position: relative;
-    z-index: 10;
-    max-width: 1600px;
-    margin: 0 auto;
-}
-
-.header {
-    text-align: center;
-    margin-bottom: 40px;
-    animation: fadeIn 1s ease-out;
-}
-
-.header h1 {
-    font-size: 36px;
-    font-weight: 300;
-    letter-spacing: 8px;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-    background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.5) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.header .subtitle {
-    font-size: 14px;
-    opacity: 0.5;
-    letter-spacing: 2px;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.summary-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
-}
-
-.card {
-    background: rgba(15, 23, 42, 0.4);
-    border-radius: 20px;
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(59, 130, 246, 0.15);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    padding: 30px;
-    animation: slideUp 0.8s ease-out;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(59, 130, 246, 0.2);
-}
-
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.card-label {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    opacity: 0.5;
-    margin-bottom: 15px;
-}
-
-.card-value {
-    font-size: 48px;
-    font-weight: 700;
-    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 10px;
-    line-height: 1.2;
-}
-
-.card-value.expenses {
-    background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.card-value.balance {
-    background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.card-currency {
-    font-size: 20px;
-    opacity: 0.6;
-    margin-right: 5px;
-}
-
-.card-info {
-    font-size: 13px;
-    opacity: 0.4;
-    margin-top: 10px;
-}
-
-.section-title {
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    opacity: 0.8;
-    letter-spacing: 1px;
-}
-
-.expense-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
-}
-
-.expense-card {
-    background: rgba(15, 23, 42, 0.4);
-    border-radius: 20px;
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(239, 68, 68, 0.2);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    padding: 25px;
-    animation: slideUp 0.8s ease-out;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.expense-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(239, 68, 68, 0.3);
-    border-color: rgba(239, 68, 68, 0.4);
-}
-
-.expense-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #ef4444, #f87171);
-}
-
-.expense-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(248, 113, 113, 0.2));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 15px;
-    font-size: 24px;
-}
-
-.expense-name {
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    opacity: 0.6;
-    margin-bottom: 10px;
-}
-
-.expense-amount {
-    font-size: 28px;
-    font-weight: 700;
-    background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.expense-currency {
-    font-size: 14px;
-    opacity: 0.6;
-    margin-right: 3px;
-}
-
-.chart-container {
-    background: rgba(15, 23, 42, 0.4);
-    border-radius: 20px;
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(59, 130, 246, 0.15);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    padding: 30px;
-    margin-bottom: 30px;
-    animation: slideUp 1s ease-out;
-}
-
-.chart-header {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    opacity: 0.8;
-}
-
-.chart-wrapper {
-    position: relative;
-    height: 300px;
-}
-
-.stats-bar {
-    display: flex;
-    justify-content: space-around;
-    background: rgba(15, 23, 42, 0.4);
-    border-radius: 20px;
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(59, 130, 246, 0.15);
-    padding: 20px;
-    animation: slideUp 1.2s ease-out;
-}
-
-.stat {
-    text-align: center;
-}
-
-.stat-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    opacity: 0.4;
-    margin-bottom: 8px;
-}
-
-.stat-value {
-    font-size: 16px;
-    font-weight: 600;
-    color: #3b82f6;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-}
-
-.status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #4ade80;
-    box-shadow: 0 0 10px #4ade80;
-    animation: blink 2s ease-in-out infinite;
-}
-
-.status-dot.error {
-    background: #ff6b6b;
-    box-shadow: 0 0 10px #ff6b6b;
-    animation: none;
-}
-
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-}
-
-.loading {
-    opacity: 0.6;
-    animation: pulse 1.5s ease-in-out infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 1; }
-}
-
-@media (max-width: 768px) {
-    .header h1 {
-        font-size: 24px;
-        letter-spacing: 4px;
-    }
-    
-    .summary-cards {
-        grid-template-columns: 1fr;
-    }
-    
-    .expense-cards {
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    }
-    
-    .card-value {
-        font-size: 36px;
-    }
-    
-    .chart-wrapper {
-        height: 250px;
-    }
-    
-    .stats-bar {
-        flex-direction: column;
-        gap: 15px;
-    }
-}
-</style>
+<script src="script.js"></script>
 </head>
 <body>
 <div class="bg-animation"></div>
 
 <div class="dashboard">
     <div class="header">
+        <img src="https://zakathouse.gov.mv/wp-content/uploads/2022/02/maldives-zakat-House-logo-latest-white-1024x312.png" alt="Logo" style="height: 100px; margin-bottom: 30px; margin-top: 20px;">
         <h1>Zakat Collection Dashboard</h1>
-        <div class="subtitle">Real-time overview of Zakat collections and distributions</div>
+        <div class="subtitle"></div>
     </div>
     
-    <div class="summary-cards">
+    <!-- Main Total Collections Card -->
+    <div class="main-card">
+        <div class="main-card-label">Total Collections</div>
+        <div class="main-card-value" id="totalCollections">
+            <span class="main-currency">MVR</span>
+            <span class="loading">Loading...</span>
+        </div>
+        <div class="main-card-label" style="margin-bottom: 0px; margin-top: 20px;">Total Zakat al-Mal Collection</div>
+    </div>
+    
+    <!-- ROI, Expenses, Balance Cards -->
+    <div class="secondary-cards">
         <div class="card">
-            <div class="card-label">Total Collections</div>
-            <div class="card-value" id="totalValue">
+            <div class="card-label">Return on Investment</div>
+            <div class="card-value roi" id="roiValue">
                 <span class="card-currency">MVR</span>
                 <span class="loading">Loading...</span>
             </div>
-            <div class="card-info">Current month collections</div>
         </div>
         
         <div class="card">
@@ -392,24 +43,30 @@ body {
                 <span class="card-currency">MVR</span>
                 <span class="loading">Loading...</span>
             </div>
-            <div class="card-info">Current month expenses</div>
         </div>
         
         <div class="card">
-            <div class="card-label">Net Balance</div>
+            <div class="card-label">Account Balance</div>
             <div class="card-value balance" id="balanceValue">
                 <span class="card-currency">MVR</span>
                 <span class="loading">Loading...</span>
             </div>
-            <div class="card-info">Collections - Expenses</div>
         </div>
     </div>
     
-    <div class="section-title">Zakat Distribution Categories</div>
-    <div class="expense-cards" id="expenseCards">
-        <!-- Expense category cards will be populated here -->
+    <!-- Beneficiary Distribution -->
+    <div class="section-title">Beneficiary Distribution</div>
+    <div class="expense-cards" id="beneficiaryCards">
+        <!-- Beneficiary cards will be populated here -->
     </div>
     
+    <!-- Investments -->
+    <div class="section-title">Other Expenses</div>
+    <div class="expense-cards" id="investmentCards">
+        <!-- Investment card will be populated here -->
+    </div>
+    
+    <!-- Collection Chart -->
     <div class="chart-container">
         <div class="chart-header">Monthly Collection Trend</div>
         <div class="chart-wrapper">
@@ -417,6 +74,7 @@ body {
         </div>
     </div>
     
+    <!-- Status Bar -->
     <div class="stats-bar">
         <div class="stat">
             <div class="stat-label">Status</div>
@@ -433,253 +91,9 @@ body {
         
         <div class="stat">
             <div class="stat-label">Refresh Rate</div>
-            <div class="stat-value">10s</div>
+            <div class="stat-value">60s</div>
         </div>
     </div>
 </div>
-
-<script>
-const totalValueEl = document.getElementById("totalValue");
-const expensesValueEl = document.getElementById("expensesValue");
-const balanceValueEl = document.getElementById("balanceValue");
-const expenseCardsEl = document.getElementById("expenseCards");
-const statusDot = document.getElementById("statusDot");
-const statusText = document.getElementById("statusText");
-const lastUpdateEl = document.getElementById("lastUpdate");
-
-let collectionChart = null;
-
-// Icons for each zakat category (using emojis)
-const categoryIcons = {
-    "Al-Fuqara": "👥",      // The poor
-    "Al-Masakin": "🤲",     // The needy
-    "Al-Amil": "👔",        // Administrators
-    "Al-Mu'allaf": "💚",    // New Muslims
-    "Al-Gharimin": "💸",    // Debtors
-    "Fi Sabilillah": "🕌",  // In the path of Allah
-    "Ibnus Sabil": "🧳"     // Travelers
-};
-
-function createParticles() {
-    for (let i = 0; i < 15; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        
-        const size = Math.random() * 4 + 2;
-        particle.style.width = size + 'px';
-        particle.style.height = size + 'px';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
-        particle.style.animationDelay = Math.random() * 5 + 's';
-        
-        document.body.appendChild(particle);
-    }
-}
-
-createParticles();
-
-function formatCurrency(value) {
-    return Number(value).toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    });
-}
-
-function updateTimestamp() {
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString('en-US', { 
-        hour: '2-digit', 
-        minute: '2-digit',
-        second: '2-digit'
-    });
-    lastUpdateEl.textContent = timeStr;
-}
-
-function initCollectionChart() {
-    const ctx = document.getElementById('collectionChart').getContext('2d');
-    
-    collectionChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: [],
-            datasets: [{
-                label: 'Daily Collections',
-                data: [],
-                borderColor: '#3b82f6',
-                backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                borderWidth: 3,
-                fill: true,
-                tension: 0.4,
-                pointRadius: 4,
-                pointHoverRadius: 6,
-                pointBackgroundColor: '#3b82f6',
-                pointBorderColor: '#fff',
-                pointBorderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
-                    titleColor: '#fff',
-                    bodyColor: '#fff',
-                    borderColor: 'rgba(59, 130, 246, 0.5)',
-                    borderWidth: 1,
-                    padding: 12,
-                    displayColors: false,
-                    callbacks: {
-                        label: function(context) {
-                            return 'MVR ' + formatCurrency(context.parsed.y);
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        color: 'rgba(255, 255, 255, 0.05)',
-                        drawBorder: false
-                    },
-                    ticks: {
-                        color: 'rgba(255, 255, 255, 0.5)',
-                        callback: function(value) {
-                            return 'MVR ' + value.toLocaleString();
-                        }
-                    }
-                },
-                x: {
-                    grid: {
-                        color: 'rgba(255, 255, 255, 0.05)',
-                        drawBorder: false
-                    },
-                    ticks: {
-                        color: 'rgba(255, 255, 255, 0.5)'
-                    }
-                }
-            }
-        }
-    });
-}
-
-function updateCollectionChart(chartData) {
-    if (!collectionChart) {
-        initCollectionChart();
-    }
-    
-    collectionChart.data.labels = chartData.labels;
-    collectionChart.data.datasets[0].data = chartData.values;
-    collectionChart.update();
-}
-
-function updateExpenseCards(categories) {
-    if (!categories || categories.length === 0) {
-        expenseCardsEl.innerHTML = '<div style="text-align: center; opacity: 0.5; padding: 40px;">No expense data available</div>';
-        return;
-    }
-    
-    expenseCardsEl.innerHTML = categories.map(cat => {
-        const icon = categoryIcons[cat.name] || "📊";
-        return `
-            <div class="expense-card">
-                <div class="expense-icon">${icon}</div>
-                <div class="expense-name">${cat.name}</div>
-                <div class="expense-amount">
-                    <span class="expense-currency">MVR</span>${formatCurrency(cat.amount)}
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-
-async function loadDashboardData() {
-    try {
-        totalValueEl.classList.add("loading");
-        expensesValueEl.classList.add("loading");
-        balanceValueEl.classList.add("loading");
-        
-        const API_URL = "https://supercordial-cary-peerlessly.ngrok-free.dev"; 
-        const res = await fetch(`${API_URL}/dashboard`, {
-            headers: {
-                "ngrok-skip-browser-warning": "true"
-            }
-        });
-        if (!res.ok) {
-            throw new Error(`HTTP ${res.status}`);
-        }
-
-        const contentType = res.headers.get("content-type");
-        if (!contentType || !contentType.includes("application/json")) {
-            const text = await res.text();
-            console.error("Non-JSON response:", text);
-            throw new Error("API did not return JSON");
-        }
-        
-        const data = await res.json();
-        
-        if (data.error) {
-            throw new Error(data.error);
-        }
-        
-        // Update summary values
-        totalValueEl.innerHTML = `<span class="card-currency">MVR</span>${formatCurrency(data.total)}`;
-        expensesValueEl.innerHTML = `<span class="card-currency">MVR</span>${formatCurrency(data.expenses)}`;
-        balanceValueEl.innerHTML = `<span class="card-currency">MVR</span>${formatCurrency(data.balance)}`;
-        
-        // Update expense cards
-        if (data.expense_categories) {
-            updateExpenseCards(data.expense_categories);
-        }
-        
-        // Update collection chart
-        if (data.chart) {
-            updateCollectionChart(data.chart);
-        }
-        
-        totalValueEl.classList.remove("loading");
-        expensesValueEl.classList.remove("loading");
-        balanceValueEl.classList.remove("loading");
-        
-        // Update status
-        statusDot.classList.remove("error");
-        statusText.textContent = "Live";
-        updateTimestamp();
-        
-    } catch (e) {
-        console.error("Error loading dashboard data:", e);
-        
-        totalValueEl.innerHTML = "Error";
-        expensesValueEl.innerHTML = "Error";
-        balanceValueEl.innerHTML = "Error";
-        
-        totalValueEl.classList.remove("loading");
-        expensesValueEl.classList.remove("loading");
-        balanceValueEl.classList.remove("loading");
-        
-        statusDot.classList.add("error");
-        statusText.textContent = "Offline";
-        lastUpdateEl.textContent = "Error";
-    }
-}
-
-// Initial load
-initCollectionChart();
-loadDashboardData();
-
-// Refresh every 10 seconds
-setInterval(loadDashboardData, 10000);
-
-// Refresh when tab becomes visible
-document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) {
-        loadDashboardData();
-    }
-});
-</script>
 </body>
 </html>
