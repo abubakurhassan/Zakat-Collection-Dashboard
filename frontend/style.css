@@ -91,7 +91,7 @@ body {
     backdrop-filter: blur(20px);
     border: 1px solid rgba(59, 130, 246, 0.15);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    padding: 40px;
+    padding: 30px 20px;
     text-align: center;
     margin-bottom: 30px;
     animation: slideUp 0.8s ease-out;
@@ -106,7 +106,7 @@ body {
 }
 
 .main-card-value {
-    font-size: clamp(36px, 8vw, 64px);
+    font-size: clamp(36px, 7vw, 64px);
     font-weight: 700;
     background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
     -webkit-background-clip: text;
@@ -118,13 +118,15 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 5px;
+    overflow: visible;
+    min-height: auto;
 }
 
 .main-currency {
-    font-size: 28px;
-    margin-right: 0;
+    font-size: clamp(20px, 4vw, 28px);
     display: block;
+    margin-bottom: 5px;
 }
 
 .secondary-cards {
@@ -140,7 +142,7 @@ body {
     backdrop-filter: blur(20px);
     border: 1px solid rgba(59, 130, 246, 0.15);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    padding: 30px;
+    padding: 25px 20px;
     animation: slideUp 0.8s ease-out;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     text-align: center;
@@ -165,16 +167,19 @@ body {
 }
 
 .card-value {
-    font-size: clamp(18px, 5vw, 42px);
+    font-size: clamp(22px, 5vw, 42px);
     font-weight: 700;
     line-height: 1.2;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 5px;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    min-height: auto;
 }
 
 .card-value.roi {
@@ -199,9 +204,9 @@ body {
 }
 
 .card-currency {
-    font-size: 18px;
-    margin-right: 0;
-    display: inline;
+    font-size: clamp(16px, 3vw, 22px);
+    display: block;
+    margin-bottom: 5px;
 }
 
 .section-title {
@@ -220,18 +225,17 @@ body {
     margin-bottom: 30px;
 }
 
-
 .expense-card {
     background: rgba(15, 23, 42, 0.4);
     border-radius: 20px;
     backdrop-filter: blur(20px);
     border: 1px solid rgba(239, 68, 68, 0.2);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    padding: 25px;
+    padding: 25px 20px;
     animation: slideUp 0.8s ease-out;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -286,13 +290,14 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 5px;
+    line-height: 1.2;
 }
 
 .expense-currency {
-    font-size: 14px;
-    margin-right: 0;
-    order: -1;
+    font-size: clamp(14px, 2.5vw, 18px);
+    display: block;
+    margin-bottom: 5px;
 }
 
 .investment-card {
@@ -400,34 +405,254 @@ body {
     50% { opacity: 1; }
 }
 
+/* ============ RESPONSIVE DESIGN ============ */
+
+/* Tablet and Mobile (768px and below) */
 @media (max-width: 768px) {
     .header h1 {
         font-size: 24px;
         letter-spacing: 4px;
     }
     
-    .main-card-value {
-        font-size: 48px;
+    .header img {
+        height: 80px;
+        margin-bottom: 20px;
     }
     
+    .main-card {
+        padding: 25px 15px;
+    }
+    
+    .main-card-value {
+        font-size: clamp(32px, 8vw, 48px);
+    }
+    
+    .main-currency {
+        font-size: clamp(18px, 3.5vw, 24px);
+    }
+    
+    /* SINGLE COLUMN LAYOUT FOR CARDS */
     .secondary-cards {
         grid-template-columns: 1fr;
+        gap: 15px;
     }
     
     .expense-cards {
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .card {
+        padding: 25px 15px;
     }
     
     .card-value {
-        font-size: 36px;
+        font-size: clamp(24px, 6vw, 36px);
+    }
+    
+    .card-currency {
+        font-size: clamp(14px, 2.5vw, 18px);
+    }
+    
+    .expense-card {
+        padding: 25px 15px;
+    }
+    
+    .expense-amount {
+        font-size: clamp(18px, 4.5vw, 24px);
+    }
+    
+    .expense-currency {
+        font-size: clamp(12px, 2.2vw, 16px);
+    }
+    
+    .chart-container {
+        padding: 25px 20px;
     }
     
     .chart-wrapper {
         height: 250px;
     }
     
+    .chart-header {
+        font-size: 16px;
+        text-align: center;
+    }
+    
     .stats-bar {
         flex-direction: column;
         gap: 15px;
+        padding: 25px 20px;
     }
+    
+    .section-title {
+        font-size: 18px;
+        margin: 30px 0 15px 0;
+        text-align: center;
+    }
+    
+    .expense-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+    
+    .expense-name {
+        font-size: 12px;
+    }
+}
+
+/* Small Mobile (480px and below) */
+@media (max-width: 480px) {
+    body {
+        padding: 15px;
+    }
+    
+    .header {
+        margin-bottom: 30px;
+    }
+    
+    .header h1 {
+        font-size: 20px;
+        letter-spacing: 3px;
+    }
+    
+    .main-card {
+        padding: 20px 12px;
+    }
+    
+    .main-card-value {
+        font-size: clamp(28px, 9vw, 36px);
+        gap: 3px;
+    }
+    
+    .main-currency {
+        font-size: clamp(16px, 3vw, 20px);
+        margin-bottom: 3px;
+    }
+    
+    .secondary-cards {
+        gap: 12px;
+        margin-bottom: 30px;
+    }
+    
+    .card {
+        padding: 20px 12px;
+    }
+    
+    .card-value {
+        font-size: clamp(20px, 7vw, 28px);
+        gap: 3px;
+    }
+    
+    .card-currency {
+        font-size: clamp(12px, 2vw, 16px);
+        margin-bottom: 3px;
+    }
+    
+    .expense-cards {
+        gap: 12px;
+        margin-bottom: 25px;
+    }
+    
+    .expense-card {
+        padding: 20px 12px;
+    }
+    
+    .expense-amount {
+        font-size: clamp(16px, 5vw, 22px);
+        gap: 3px;
+    }
+    
+    .expense-currency {
+        font-size: clamp(11px, 1.6vw, 13px);
+        margin-bottom: 3px;
+    }
+    
+    .chart-container {
+        padding: 20px 15px;
+        margin-bottom: 25px;
+    }
+    
+    .chart-wrapper {
+        height: 200px;
+    }
+    
+    .section-title {
+        font-size: 16px;
+        margin: 25px 0 12px 0;
+    }
+    
+    .expense-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+    
+    .expense-name {
+        font-size: 11px;
+    }
+}
+
+/* Extra Small Mobile (360px and below) */
+@media (max-width: 360px) {
+    .header h1 {
+        font-size: 18px;
+        letter-spacing: 2px;
+    }
+    
+    .main-card-value {
+        font-size: clamp(24px, 10vw, 32px);
+    }
+    
+    .card-value {
+        font-size: clamp(18px, 8vw, 24px);
+    }
+    
+    .expense-amount {
+        font-size: clamp(14px, 6vw, 20px);
+    }
+    
+    body {
+        padding: 12px;
+    }
+}
+
+/* For large numbers that need wrapping */
+.number-display {
+    display: block;
+    text-align: center;
+    width: 100%;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+    padding: 2px 0;
+}
+
+.number-wrap {
+    display: inline-block;
+    max-width: 100%;
+    word-break: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+}
+
+/* Ensure all cards are full width and stack properly */
+@media (max-width: 768px) {
+    .card,
+    .expense-card,
+    .main-card,
+    .chart-container,
+    .stats-bar {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+/* Optional: Add smooth transition for layout changes */
+.secondary-cards,
+.expense-cards {
+    transition: grid-template-columns 0.3s ease;
 }

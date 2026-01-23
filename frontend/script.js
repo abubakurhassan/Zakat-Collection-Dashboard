@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     const totalCollectionsEl = document.getElementById("totalCollections");
-    const roiValueEl = document.getElementById("roiValue");
+    // const roiValueEl = document.getElementById("roiValue");
     const expensesValueEl = document.getElementById("expensesValue");
     const balanceValueEl = document.getElementById("balanceValue");
     const beneficiaryCardsEl = document.getElementById("beneficiaryCards");
@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function loadDashboardData() {
         try {
             totalCollectionsEl.classList.add("loading");
-            roiValueEl.classList.add("loading");
+            // roiValueEl.classList.add("loading");
             expensesValueEl.classList.add("loading");
             balanceValueEl.classList.add("loading");
             
@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
             
             // Update main values
             totalCollectionsEl.innerHTML = `<span class="main-currency">MVR</span>${formatCurrency(data.total_collections)}`;
-            roiValueEl.innerHTML = `<span class="card-currency">MVR</span>${formatCurrency(data.roi)}`;
+            // roiValueEl.innerHTML = `<span class="card-currency">MVR</span>${formatCurrency(data.roi)}`;
             expensesValueEl.innerHTML = `<span class="card-currency">MVR</span>${formatCurrency(data.total_expenses)}`;
             balanceValueEl.innerHTML = `<span class="card-currency">MVR</span>${formatCurrency(data.account_balance)}`;
             
@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             
             totalCollectionsEl.classList.remove("loading");
-            roiValueEl.classList.remove("loading");
+            // roiValueEl.classList.remove("loading");
             expensesValueEl.classList.remove("loading");
             balanceValueEl.classList.remove("loading");
             
@@ -221,12 +221,12 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Error loading dashboard:", e);
             
             totalCollectionsEl.innerHTML = "Error";
-            roiValueEl.innerHTML = "Error";
+            // roiValueEl.innerHTML = "Error";
             expensesValueEl.innerHTML = "Error";
             balanceValueEl.innerHTML = "Error";
             
             totalCollectionsEl.classList.remove("loading");
-            roiValueEl.classList.remove("loading");
+            // roiValueEl.classList.remove("loading");
             expensesValueEl.classList.remove("loading");
             balanceValueEl.classList.remove("loading");
             
